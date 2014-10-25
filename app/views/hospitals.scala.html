@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(values: Computed)
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -10,6 +10,35 @@
     <meta name="description" content="HACKNY Hack by Abdi, Nick and Tom" />
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script>
+      $(document).ready(function() {
+        var procedures = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 100,
+            prefetch: {
+              url: '@routes.Assets.at("javascripts/procedures.json")'
+            }
+        });
+        companies.initialize();
+        $('#prefetch .typeahead').typeahead({
+              highlight: true,
+              hint: true
+            }, {
+              name: 'procedures',
+              displayKey: 'name',
+              source: procedures.ttAdapter(),
+              templates: {
+                empty: ['<div class="empty-message">', 'unable to find any procedures that match the current query', '</div>'].join('\n'),
+                suggestion: function(datum) {
+                  return "<p class='search'>" + datum.name + "</span></p></a>";
+                }
+              }
+            });
+          });
+    </script>
+
   </head>
   <body>
     <nav class="navbar navbar-default" role="navigation">
@@ -21,8 +50,15 @@
     </nav>
     <div class="container">
       <header class="clearfix">
-        <h1>Welcome</h1>
+        <h1>Results for procedure: @values.procName</h1>
       </header>
+
+        <div class="col-md-12">
+          <ul class="cbp-rfgrid">
+            @for(i <- 1 to values.numHospitals) {
+              <li>@values.priceScores(i - 1)</li>
+              <li>Quality score: @values.qualityScores(i - 1)</li>
+            }
     </div>
 
   </body>

@@ -1,9 +1,15 @@
-@(input: String)
+@(userForm: Form[UserInput])
+@import helper._
+@import helper.twitterBootstrap._
+
 
 <!DOCTYPE html>
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
+
+
+
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -12,8 +18,45 @@
     <meta name="description" content="" />
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/bloodhound.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/typeahead.jquery.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/typeahead.bundle.min.js")"></script>
+
+     <script>
+      $(document).ready(function() {
+        var procedures = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 100,
+            prefetch: {
+              url: '@routes.Assets.at("javascripts/procedures.json")'
+            }
+        });
+        procedures.initialize();
+        $('#prefetch .typeahead').typeahead({
+              highlight: true,
+              hint: true
+            }, {
+              name: 'procedures',
+              displayKey: 'name',
+              source: procedures.ttAdapter(),
+              templates: {
+                empty: ['<div class="empty-message">', 'unable to find any procedures that match the current query', '</div>'].join('\n'),
+                suggestion: function(datum) {
+                  return "<p class='search'>" + datum.name + "</span></p></a>";
+                }
+              }
+            });
+          });
+    </script>
+
+
   </head>
   <body>
+
+
+
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -25,8 +68,19 @@
       <header class="clearfix">
         <h1 class="mainHeader">Welcome to Reasonable Care!</h1><br>
         <hr/>
-        <div class="form-group" id="prefetch">
-              <h3>1: What procedure are you undergoing?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a procedure">
+
+        @helper.form(action = routes.Application.compute()) {
+            <div class="form-group" id="prefetch">
+
+              @helper.inputText(userForm("procName"), '_label -> "What procedure will you require?", '_class ->"typeahead")
+              @helper.checkbox(userForm("q1"), '_label -> "Is the quality of the explaination a doctor gives you important to you?")
+              @helper.checkbox(userForm("q2"), '_label -> "Is a quiet environment important to you?")
+              @helper.checkbox(userForm("q3"), '_label -> "Is the quality of the nurse attending to you important to you?")
+              @helper.checkbox(userForm("q4"), '_label -> "Is the bedside manner of the doctor important to you?")
+              @helper.checkbox(userForm("q5"), '_label -> "Is the effectiveness of the way the hospital relieves your pain important to you?")
+              @helper.checkbox(userForm("q2"), '_label -> "Is the cleanliness of the bathroom important to you?")
+              @helper.checkbox(userForm("q2"), '_label -> "Is promptness of aid important to you?")
+              <!-- <h3>1: What procedure are you undergoing?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a procedure"> -->
               <h3>2: What do you value in a hospital?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a quality">
               <br>
                 <div class="form-group">
@@ -35,6 +89,8 @@
                   </div>
                 </div>
 
+          }
+
 
 
               </div>
@@ -42,7 +98,7 @@
         @input
       </header>
     </div>
-    col-lg-4 col-lg-offset-4
+
 
   </body>
 </html>
