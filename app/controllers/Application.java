@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Hospital;
 //import org.apache.;
 import play.*;
 import play.mvc.*;
@@ -9,6 +10,15 @@ import views.html.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+
+import play.db.ebean.Model;
+
+
+
+
 
 public class Application extends Controller {
 
@@ -21,30 +31,60 @@ public class Application extends Controller {
 
     public static String storeCSV() {
 
-        String fileToParse = "HCAHPS_-_Hospital.csv";
+        String fileToParse = Play.application().path() + "/data/HCAHPS_-_Hospital.csv";
+
         BufferedReader fileReader = null;
-        String input = "got to this call: ";
-        input += Play.application().path();
+        String input = "";
+        //input += Play.application().path();
         //Delimiter used in CSV file
+
         final String DELIMITER = ",";
         try
         {
             String line = "";
             //Create the file reader
-            fileReader = new BufferedReader(new FileReader("/app/test.csv"));
+            //fileReader = new BufferedReader(new FileReader("/app/test.csv"));
+            //InputStream fis = game.getFileIO().readFile("test.csv");
+            //fileReader = Play.classloader.getResourceAsStream("HCAHPS_-_Hospital.csv");
+            fileReader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(fileToParse), "UTF-8"));
+
             //Read the file line by line
             int s_num = 0;
-            input += "right before loop ";
-            while ((line = fileReader.readLine()) != null && s_num <= 10)
+            //input += "right before loop ";
+            long idNum = 0;
+            long prevNum = 0;
+            while ((line = fileReader.readLine()) != null && s_num < 100)
             {
-
                 //Get all tokens available in line
                 String[] tokens = line.split(DELIMITER);
-                for(String token : tokens)
-                {
-                    input += token;
+                int colNum = 0;
+                String hospitalData = "";
+                boolean addFlag = false;
+
+                for(String token : tokens) {
+                    if(colNum == 0){
+                        input += token;
+                    }
+                    // if(colNum == 4 && token.equals("MA")){
+                    if(colNum == 4){
+                        addFlag = true;
+                        //input += "" + colNum + ": " + token + "\n";
+                    } //else
+                        //break;
+                    hospitalData += token + ", ";
+                    colNum++;
                 }
-                s_num++;
+                if(addFlag == true){
+                    //input += "START OF LINE: " + s_num + " " + hospitalData;
+                    s_num++;
+                    if(idNum != prevNum){
+                        //Hospital currHospital = new Hospital(idNum);
+                        //input += "About to save hospital";
+                        //currHospital.save();
+                    }
+                    prevNum = idNum;
+                }
             }
         }
         catch (Exception e) {
@@ -59,6 +99,7 @@ public class Application extends Controller {
                 e.printStackTrace();
             }
         }
+        //String input = "";
         return input;
     }
 }
