@@ -44,7 +44,7 @@
               templates: {
                 empty: ['<div class="empty-message">', 'unable to find any procedures that match the current query', '</div>'].join('\n'),
                 suggestion: function(datum) {
-                  return "<p class='search'>" + datum.name + "</span></p></a>";
+                  return "<p class='search'>" + datum.name + "</p>";
                 }
               }
             });
@@ -70,9 +70,42 @@
         <hr/>
 
         @helper.form(action = routes.Application.compute()) {
-            <div class="form-group" id="prefetch">
+        <div>
+            <!-- <div class="form-group" id="prefetch">
 
+              <input class="form-control typeahead" type="text" id="procName"name="procName"placeholder="Search Companies..">
+            </div> -->
+            <select class="form-control input-lg" id="procName" name="procName">
+
+              <option value="0">Extracranial procedures without complications</option>
+              <option value="1">Degenerative nervous system disorders without cc/mcc</option>
+              <option value="2">intracranial hemorrhage or cerebral infarction w mcc</option>
+              <option value="3">intracranial hemorrhage or cerebral infarction w cc</option>
+              <option value="4">intracranial hemorrhage or cerebral infarction w/o cc/mcc</option>
+              <option value="5">transient ischemia</option>
+              <option value="6">cranial & peripheral nerve disorders w/o mcc</option>
+              <option value="7">seizures w/o mcc</option>
+              <option value="8">dysequilibrium</option>
+              <option value="9">pulmonary embolism w/o mcc</option>
+              <option value="10">respiratory infections & inflammations w mcc</option>
+              <option value="11">respiratory infections & inflammations w cc</option>
+              <option value="12">pulmonary edema & respiratory failure</option>
+              <option value="13">chronic obstructive pulmonary disease w mcc</option>
+              <option value="14">chronic obstructive pulmonary disease w cc</option>
+              <option value="15">chronic obstructive pulmonary disease w/o cc/mcc</option>
+              <option value="16">simple pneumonia & pleurisy w mcc</option>
+              <option value="17">simple pneumonia & pleurisy w cc</option>
+              <option value="18">simple pneumonia & pleurisy w/o cc/mcc</option>
+              <option value="19">bronchitis & asthma w cc/mcc</option>
+              <option value="20">respiratory system diagnosis w ventilator support 96+ hours</option>
+              <option value="21">respiratory system diagnosis w ventilator support 96- hours</option>
+
+            </select>
+            </div>
+            <br>
+            <!-- </div>
               @helper.inputText(userForm("procName"), '_label -> "What procedure will you require?", '_class ->"typeahead")
+            </div> -->
               @helper.checkbox(userForm("q1"), '_label -> "Is the quality of the explaination a doctor gives you important to you?")
               @helper.checkbox(userForm("q2"), '_label -> "Is a quiet environment important to you?")
               @helper.checkbox(userForm("q3"), '_label -> "Is the quality of the nurse attending to you important to you?")
@@ -81,7 +114,7 @@
               @helper.checkbox(userForm("q2"), '_label -> "Is the cleanliness of the bathroom important to you?")
               @helper.checkbox(userForm("q2"), '_label -> "Is promptness of aid important to you?")
               <!-- <h3>1: What procedure are you undergoing?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a procedure"> -->
-              <h3>2: What do you value in a hospital?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a quality">
+
               <br>
                 <div class="form-group">
                   <div class="col-sm-offset-5 col-sm-10">
@@ -95,7 +128,7 @@
 
               </div>
         </div>
-        @input
+
       </header>
     </div>
 

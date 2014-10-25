@@ -9,8 +9,9 @@ import play.data.*;
 
 public class Computed {
     public String procName;
+    public String hospitals[];
+    public String addresses[];
     public Integer numHospitals;
-    //public String hospitalName[];
     public Integer qualityScores[];
     public Integer priceScores[];
 

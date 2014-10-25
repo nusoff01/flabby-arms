@@ -11,40 +11,16 @@
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
-    <script>
-      $(document).ready(function() {
-        var procedures = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 100,
-            prefetch: {
-              url: '@routes.Assets.at("javascripts/procedures.json")'
-            }
-        });
-        companies.initialize();
-        $('#prefetch .typeahead').typeahead({
-              highlight: true,
-              hint: true
-            }, {
-              name: 'procedures',
-              displayKey: 'name',
-              source: procedures.ttAdapter(),
-              templates: {
-                empty: ['<div class="empty-message">', 'unable to find any procedures that match the current query', '</div>'].join('\n'),
-                suggestion: function(datum) {
-                  return "<p class='search'>" + datum.name + "</span></p></a>";
-                }
-              }
-            });
-          });
-    </script>
+
 
   </head>
   <body>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" style="color:#000;" href="#"><span style="font-weight: bold;"> Hospitals.cheap</span> <span style="color: grey;">Find the right hospital for your procedure</span></a>
+                <a class="navbar-brand" style="color:#000;" href="#"><span style="font-weight: bold;"> Reasonable.care</span> <span style="color: grey;">Find the right hospital for your procedure</span></a>
+
+
             </div>
         </div>
     </nav>
@@ -54,10 +30,13 @@
       </header>
 
         <div class="col-md-12">
-          <ul class="cbp-rfgrid">
+          <div class="cbp-rfgrid">
+
             @for(i <- 1 to values.numHospitals) {
-              <li>@values.priceScores(i - 1)</li>
-              <li>Quality score: @values.qualityScores(i - 1)</li>
+            <div style="background-color:rgb(50,50,@values.priceScores(i - 1));color:white">
+              <h2>@values.hospitals(i - 1)</h2>
+              <h3>Quality score: @values.qualityScores(i - 1) | Address: @values.addresses(i - 1)</h3>
+            </div>
             }
     </div>
 

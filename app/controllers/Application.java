@@ -64,6 +64,8 @@ public class Application extends Controller {
 
         results.qualityScores = new Integer[count];
         results.priceScores = new Integer[count];
+        results.hospitals = new String[count];
+        results.addresses = new String[count];
 
         System.out.println("FINAL COUNT: " + count);
         results.numHospitals = count;
@@ -71,7 +73,9 @@ public class Application extends Controller {
         for (Map.Entry<Long, Hospital> entry : map.entrySet()) {
             Hospital currH = entry.getValue();
             if(currH.prices[fakeProc] != null){
-                results.priceScores[count] = currH.prices[fakeProc];
+                results.hospitals[count] = currH.hospitalName;
+                results.priceScores[count] = currH.prices[fakeProc] * 5;
+                results.addresses[count] = currH.streetAddress;
                 //results.hospitalName = currH.hospitalName;
                 int num = 0;
                 double sum = 0;
