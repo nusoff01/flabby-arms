@@ -8,6 +8,7 @@ import play.*;
 import play.mvc.*;
 
 import play.data.*;
+import play.api.*;
 
 
 
@@ -25,30 +26,19 @@ import java.io.FileInputStream;
 
 
 
+
 public class Application extends Controller {
 
     private static final Form<UserInput> userForm = Form.form(UserInput.class);
 
     public static Result index() {
-        //String input = storeCSV();
-        //String input = "yo";
         return ok(index.render(userForm));
     }
 
-// public int explainMed;
-//     public int soundIntol;
-//     public int nurseQual;
-//     public int bedsideMan;
-//     public int pain;
-//     public int bathroom;
-//     public int promptness;
-
     public static Result compute(){
         Form<UserInput> filled = userForm.bindFromRequest();
-
         Map<Long, Hospital> map = storeCSV();
         String response = "";
-
 
         Computed results = new Computed();
         UserInput created = filled.get();
@@ -129,8 +119,9 @@ public class Application extends Controller {
 
          Map<Long, Hospital> map = new HashMap<Long, Hospital>();
 
-        String fileToParse = Play.application().path() + "/data/Cleaned_Hospital_Data.csv";
-
+        //String path = play.Play.application().resource("/data/Cleaned_Hospital_Data.csv").toString();
+         String path = "data/Cleaned_Hospital_Data.csv";
+        //BufferedReader fileReader = null;  JUST REPLACED
         BufferedReader fileReader = null;
         String input = "";
         //input += Play.application().path();
@@ -144,8 +135,19 @@ public class Application extends Controller {
             //fileReader = new BufferedReader(new FileReader("/app/test.csv"));
             //InputStream fis = game.getFileIO().readFile("test.csv");
             //fileReader = Play.classloader.getResourceAsStream("HCAHPS_-_Hospital.csv");
-            fileReader = new BufferedReader(new InputStreamReader(
-                new FileInputStream(fileToParse), "UTF-8"));
+
+            // VirtualFile vf = VirtualFile.fromRelativePath(fileToParse);
+            // File realFile = vf.getRealFile();
+            // fileReader = new FileReader(realFile);
+
+            //String path = Play.application().resource("/data/Cleaned_Hospital_Data.csv").toString();
+            //String content = Files.toString(new File(path), Charsets.UTF_8);
+
+            fileReader = new BufferedReader(new InputStreamReader( new FileInputStream(path), "UTF-8"));
+            //fileReader = new BufferedReader(new InputStreamReader( new FileInputStream(path), "UTF-8"));
+
+            //(Application.class.getResourceAsStream("/data/Cleaned_Hospital_Data.csv"));
+
 
             //Read the file line by line
             int s_num = 0;
@@ -159,19 +161,12 @@ public class Application extends Controller {
                 if((lineNum - 1) % 21 == 0){
 
                 }
-                //input += "@@@ Start of a line @@@";
-                //Get all tokens available in line
+
                 String[] tokens = line.split(DELIMITER);
                 int colNum = 0;
-                //String hospitalData = "";
-                //boolean addFlag = false;
-                //input += "||| " + lineNum + " |||";
+
 
                 for(String token : tokens) {
-                    // if(colNum == 0){
-                    //     input += token;
-                    // }
-                    //input += colNum + " " + token;
 
                     if((lineNum - 1) % 21 == 0){
                         if(colNum == 2){
@@ -211,16 +206,7 @@ public class Application extends Controller {
                             inUse.promptness = (int) (num * 100);
 
                     }
-                    // if(colNum == 4 && token.equals("MA")){
-                    // if(colNum == 4){
-                    //     addFlag = true;
-                    //     //input += "" + colNum + ": " + token + "\n";
-                    // } //else
-                        //break;
-                    // hospitalData += token + ", ";
                     colNum++;
-
-
                 }
                 if((lineNum + 1) % 21 == 0){
                     System.out.println(inUse.hospitalID);
@@ -229,19 +215,18 @@ public class Application extends Controller {
                 }
                 lineNum++;
             }
+//Play.application().resource("/data/Cleaned_Medical_Procedure_Data.csv").toString();
 
+            //path = play.Play.application().resource("/data/Cleaned_Medical_Procedure_Data.csv").toString();
+            path = "data/Cleaned_Medical_Procedure_Data.csv";
 
-
-
-
-
-
-
-            fileToParse = Play.application().path() + "/data/Cleaned_Medical_Procedure_Data.csv";
-
-            //line = "";
+            line = "";
             fileReader = new BufferedReader(new InputStreamReader(
-                new FileInputStream(fileToParse), "UTF-8"));
+                new FileInputStream(path), "UTF-8"));
+
+            // VirtualFile vf = VirtualFile.fromRelativePath(fileToParse);
+            // File realFile = vf.getRealFile();
+            // fileReader = new FileReader(realFile);
 
             lineNum = 0;
             int procNum = 0;
@@ -304,7 +289,6 @@ public class Application extends Controller {
             }
         }
 
-        //String input = "";
         return map;
     }
 }
