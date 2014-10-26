@@ -4,13 +4,14 @@
 }
 .mainHeader {
   text-align:center;
+  font-size:1.75em;
 }
 .checkbox {
 }
 
-input {
+/*input {
   width: 90%;
-}
+}*/
 
 a.tt-suggestion, .empty-message, .tt-suggestion {
   top: 10px!important;
@@ -20,6 +21,10 @@ a.tt-suggestion, .empty-message, .tt-suggestion {
   color: black!important;
   border-bottom: solid 1px #005fab;
   display:block
+}
+
+.head-divide{
+  font-weight: bold
 }
 
 .twitter-typeahead {
@@ -32,4 +37,16 @@ a.tt-suggestion, .empty-message, .tt-suggestion {
 
 .search {
   color: black!important;
+}
+
+.clearfix-b{
+  text-align:center;
+}
+
+.cbp-rfgrid-inner {
+  padding:10px;
+  border:3px black solid;
+
+  border-radius:5px;
+  margin-top:10px;
 }

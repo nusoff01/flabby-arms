@@ -52,7 +52,10 @@ public class Application extends Controller {
 
         Computed results = new Computed();
         UserInput created = filled.get();
-        int fakeProc = 20;
+        String procNum = created.procName;
+
+        Integer fakeProc = Integer.parseInt(procNum);
+        //int fakeProc = 20;
         int count = 0;
         for (Map.Entry<Long, Hospital> entry : map.entrySet()) {
             Hospital currH = entry.getValue();

@@ -25,19 +25,25 @@
         </div>
     </nav>
     <div class="container">
-      <header class="clearfix">
-        <h1>Results for procedure: @values.procName</h1>
+      <header class="clearfix-b">
+        <h1>@values.numHospitals to choose from!</h1>
+
       </header>
 
         <div class="col-md-12">
           <div class="cbp-rfgrid">
 
+
             @for(i <- 1 to values.numHospitals) {
-            <div style="background-color:rgb(50,50,@values.priceScores(i - 1));color:white">
+            <div class="cbp-rfgrid-inner" style="background-color:rgb(50,@values.priceScores(i - 1),0);color:white">
               <h2>@values.hospitals(i - 1)</h2>
-              <h3>Quality score: @values.qualityScores(i - 1) | Address: @values.addresses(i - 1)</h3>
+              <hr/>
+              <h3>Quality score: @values.qualityScores(i - 1)</h3>
+              <h3>Address: @values.addresses(i - 1)</h3>
             </div>
+
             }
+            </div>
     </div>
 
   </body>

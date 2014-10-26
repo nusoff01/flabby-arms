@@ -60,14 +60,15 @@
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" style="color:#000;" href="#"><span style="font-weight: bold;"> Reasonable.care</span> <span style="color: grey;">Find great care at a reasonable price</span></a>
+                <a class="navbar-brand" style="color:#000;" href="#"><span style="font-weight: bold;"> Reasonable.care</span> <span style="color: grey;">Find great health care at a reasonable price</span></a>
             </div>
         </div>
     </nav>
     <div class="container">
-      <header class="clearfix">
+      <header class="mainHeader">
         <h1 class="mainHeader">Welcome to Reasonable Care!</h1><br>
-        <hr/>
+      </header>
+        <hr class="head-divide"/>
 
         @helper.form(action = routes.Application.compute()) {
         <div>
@@ -78,27 +79,27 @@
             <select class="form-control input-lg" id="procName" name="procName">
 
               <option value="0">Extracranial procedures without complications</option>
-              <option value="1">Degenerative nervous system disorders without cc/mcc</option>
-              <option value="2">intracranial hemorrhage or cerebral infarction w mcc</option>
-              <option value="3">intracranial hemorrhage or cerebral infarction w cc</option>
-              <option value="4">intracranial hemorrhage or cerebral infarction w/o cc/mcc</option>
+              <option value="1">Degenerative nervous system disorders without complications</option>
+              <option value="2">intracranial hemorrhage or cerebral infarction with major complications</option>
+              <option value="3">intracranial hemorrhage or cerebral infarction with complications</option>
+              <option value="4">intracranial hemorrhage or cerebral infarction without complications</option>
               <option value="5">transient ischemia</option>
-              <option value="6">cranial & peripheral nerve disorders w/o mcc</option>
-              <option value="7">seizures w/o mcc</option>
+              <option value="6">cranial & peripheral nerve disorders without major complications</option>
+              <option value="7">seizures without major complications</option>
               <option value="8">dysequilibrium</option>
-              <option value="9">pulmonary embolism w/o mcc</option>
-              <option value="10">respiratory infections & inflammations w mcc</option>
-              <option value="11">respiratory infections & inflammations w cc</option>
+              <option value="9">pulmonary embolism without major complications</option>
+              <option value="10">respiratory infections & inflammations with major complications</option>
+              <option value="11">respiratory infections & inflammations with complications</option>
               <option value="12">pulmonary edema & respiratory failure</option>
-              <option value="13">chronic obstructive pulmonary disease w mcc</option>
-              <option value="14">chronic obstructive pulmonary disease w cc</option>
-              <option value="15">chronic obstructive pulmonary disease w/o cc/mcc</option>
-              <option value="16">simple pneumonia & pleurisy w mcc</option>
-              <option value="17">simple pneumonia & pleurisy w cc</option>
-              <option value="18">simple pneumonia & pleurisy w/o cc/mcc</option>
-              <option value="19">bronchitis & asthma w cc/mcc</option>
-              <option value="20">respiratory system diagnosis w ventilator support 96+ hours</option>
-              <option value="21">respiratory system diagnosis w ventilator support 96- hours</option>
+              <option value="13">chronic obstructive pulmonary disease with major complications</option>
+              <option value="14">chronic obstructive pulmonary disease with complications</option>
+              <option value="15">chronic obstructive pulmonary disease without complications</option>
+              <option value="16">simple pneumonia & pleurisy with major complications</option>
+              <option value="17">simple pneumonia & pleurisy with complications</option>
+              <option value="18">simple pneumonia & pleurisy without complications</option>
+              <option value="19">bronchitis & asthma with complications</option>
+              <option value="20">respiratory system diagnosis with ventilator support 96+ hours</option>
+              <option value="21">respiratory system diagnosis with ventilator support 96- hours</option>
 
             </select>
             </div>
@@ -106,13 +107,41 @@
             <!-- </div>
               @helper.inputText(userForm("procName"), '_label -> "What procedure will you require?", '_class ->"typeahead")
             </div> -->
-              @helper.checkbox(userForm("q1"), '_label -> "Is the quality of the explaination a doctor gives you important to you?")
-              @helper.checkbox(userForm("q2"), '_label -> "Is a quiet environment important to you?")
-              @helper.checkbox(userForm("q3"), '_label -> "Is the quality of the nurse attending to you important to you?")
-              @helper.checkbox(userForm("q4"), '_label -> "Is the bedside manner of the doctor important to you?")
-              @helper.checkbox(userForm("q5"), '_label -> "Is the effectiveness of the way the hospital relieves your pain important to you?")
-              @helper.checkbox(userForm("q2"), '_label -> "Is the cleanliness of the bathroom important to you?")
-              @helper.checkbox(userForm("q2"), '_label -> "Is promptness of aid important to you?")
+            <label>
+              <input type="checkbox" value="true" name="q1" id="q1">
+              Is the quality of the explaination a doctor gives you important to you?
+            </label><br>
+              <!-- @helper.checkbox(userForm("q1"), '_label -> "Is the quality of the explaination a doctor gives you important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q2" id="q2">
+                Is a quiet environment important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q2"), '_label -> "Is a quiet environment important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q3" id="q3">
+                Is the quality of the nurse attending to you important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q3"), '_label -> "Is the quality of the nurse attending to you important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q4" id="q4">
+                Is the bedside manner of the doctor important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q4"), '_label -> "Is the bedside manner of the doctor important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q5" id="q5">
+                Is the effectiveness of the way the hospital relieves your pain important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q5"), '_label -> "Is the effectiveness of the way the hospital relieves your pain important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q6" id="q6">
+                Is the cleanliness of the bathroom important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q6"), '_label -> "Is the cleanliness of the bathroom important to you?") -->
+              <label>
+                <input type="checkbox" value="true" name="q7" id="q7">
+                Is promptness of aid important to you?
+              </label><br>
+              <!-- @helper.checkbox(userForm("q7"), '_label -> "Is promptness of aid important to you?") -->
               <!-- <h3>1: What procedure are you undergoing?</h3> <input class="form-control typeahead searchBars col-lg-4 col-lg-offset-4" type="text" placeholder="Enter a procedure"> -->
 
               <br>
@@ -123,15 +152,16 @@
                 </div>
 
           }
+          <br>
 
 
 
               </div>
         </div>
 
-      </header>
+
     </div>
-
-
+<hr>
+    <h4 style="text-align:center">Data courtesy of <a href="http://cms.gov/">cms.gov</a> and the <a href="http://kff.org/">Kaiser Family Foundation</a></h4>
   </body>
 </html>

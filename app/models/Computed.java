@@ -8,6 +8,7 @@ import play.data.*;
 
 
 public class Computed {
+
     public String procName;
     public String hospitals[];
     public String addresses[];
