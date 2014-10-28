@@ -10,8 +10,6 @@ import play.mvc.*;
 import play.data.*;
 import play.api.*;
 
-
-
 import views.html.*;
 import java.util.*;
 import java.io.BufferedReader;
@@ -20,10 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
-
-
-
-
 
 
 
@@ -52,7 +46,6 @@ public class Application extends Controller {
             if(currH.prices[fakeProc] != null){
                 count++;
             }
-            //response += currH.hospitalID + " ";
         }
 
         results.qualityScores = new Integer[count];
@@ -60,7 +53,6 @@ public class Application extends Controller {
         results.hospitals = new String[count];
         results.addresses = new String[count];
 
-        System.out.println("FINAL COUNT: " + count);
         results.numHospitals = count;
         count = 0;
         for (Map.Entry<Long, Hospital> entry : map.entrySet()) {
@@ -104,50 +96,34 @@ public class Application extends Controller {
                 results.qualityScores[count] = (int) score;
 
                 count++;
-                System.out.println("Curr: " + currH.prices[fakeProc]);
             }
-            //response += currH.hospitalID + " ";
         }
 
         results.procName = created.procName;
         return ok(hospitals.render(results));
     }
 
-
+    /*
+     *  storeCSV gathers data from the two CSV files and computes
+     *
+     */
 
     public static Map storeCSV() {
 
-         Map<Long, Hospital> map = new HashMap<Long, Hospital>();
+        Map<Long, Hospital> map = new HashMap<Long, Hospital>();
 
-        //String path = play.Play.application().resource("/data/Cleaned_Hospital_Data.csv").toString();
-         String path = "data/Cleaned_Hospital_Data.csv";
-        //BufferedReader fileReader = null;  JUST REPLACED
+        //QUALITY DATA
+
+
+        String path = "data/Cleaned_Hospital_Data.csv";
         BufferedReader fileReader = null;
-        String input = "";
-        //input += Play.application().path();
-        //Delimiter used in CSV file
 
         final String DELIMITER = ",";
         try
         {
             String line = "";
-            //Create the file reader
-            //fileReader = new BufferedReader(new FileReader("/app/test.csv"));
-            //InputStream fis = game.getFileIO().readFile("test.csv");
-            //fileReader = Play.classloader.getResourceAsStream("HCAHPS_-_Hospital.csv");
-
-            // VirtualFile vf = VirtualFile.fromRelativePath(fileToParse);
-            // File realFile = vf.getRealFile();
-            // fileReader = new FileReader(realFile);
-
-            //String path = Play.application().resource("/data/Cleaned_Hospital_Data.csv").toString();
-            //String content = Files.toString(new File(path), Charsets.UTF_8);
 
             fileReader = new BufferedReader(new InputStreamReader( new FileInputStream(path), "UTF-8"));
-            //fileReader = new BufferedReader(new InputStreamReader( new FileInputStream(path), "UTF-8"));
-
-            //(Application.class.getResourceAsStream("/data/Cleaned_Hospital_Data.csv"));
-
 
             //Read the file line by line
             int s_num = 0;
@@ -156,11 +132,6 @@ public class Application extends Controller {
             Hospital inUse = new Hospital(2);
             while ((line = fileReader.readLine()) != null )
             {
-
-
-                if((lineNum - 1) % 21 == 0){
-
-                }
 
                 String[] tokens = line.split(DELIMITER);
                 int colNum = 0;
@@ -181,15 +152,11 @@ public class Application extends Controller {
                         if(colNum == 3)
                             inUse.streetAddress = token;
                         if(colNum == 4)
-                            inUse.streetAddress += token + ", MA";
+                            inUse.streetAddress += " " + token + ", MA";
                     }
-                    System.out.println("check" + inUse.hospitalID);
-
 
                     if((lineNum - 1) % 3 == 0 && colNum == 19){
-                        //input += token;
                         double num = Double.parseDouble(token);
-                        //input += num;
                         if((lineNum - 1) % 21 == 0)
                             inUse.explainMed = (int) (num * 100);
                         if((lineNum - 1) % 21 == 3)
@@ -215,9 +182,9 @@ public class Application extends Controller {
                 }
                 lineNum++;
             }
-//Play.application().resource("/data/Cleaned_Medical_Procedure_Data.csv").toString();
 
-            //path = play.Play.application().resource("/data/Cleaned_Medical_Procedure_Data.csv").toString();
+            //PRICE DATA
+
             path = "data/Cleaned_Medical_Procedure_Data.csv";
 
             line = "";
@@ -236,39 +203,29 @@ public class Application extends Controller {
             while ((line = fileReader.readLine()) != null )
             {
                 Hospital inUse2 = new Hospital(1);
-                //input += "@@@ Start of a line @@@";
-                //Get all tokens available in line
+
                 String[] tokens = line.split(DELIMITER);
                 int colNum = 0;
                 long idNum = 0;
                 for(String token : tokens) {
                     if(colNum == 0){
                         currNum = Long.parseLong(token);
-                        //input += "*" + token + "*";
                     }
 
                     if(currNum - prevNum > 1){
                         procNum++;
-                        input += procNum + " ";
                     }
                     if(colNum == 2){
-
                         idNum = Long.parseLong(token);
-                        //input += " | " + Long.parseLong(token) + " | ";
                     }
-                    //input += "*" + token + "*";
-
                     if(colNum == 12){
                         if(procNum < 97){
                             Hospital response = map.get(idNum);
                             double dVal = (1.0 - Double.parseDouble(token));
-                            int val = (int)(100 * dVal);
-                            System.out.println("val: " + val + "procNum: " + procNum);
+                            int val = (int)(200 * dVal);
                             response.prices[procNum] = val;
-                            System.out.println("right after");
                             map.put(idNum, response);
                             if(procNum == 96) break;
-
                         }
                     }
                     colNum++;
@@ -277,7 +234,6 @@ public class Application extends Controller {
             }
         }
         catch (Exception e) {
-            input += " exception caught";
             e.printStackTrace();
         }
         finally
@@ -288,7 +244,6 @@ public class Application extends Controller {
                 e.printStackTrace();
             }
         }
-
         return map;
     }
 }
