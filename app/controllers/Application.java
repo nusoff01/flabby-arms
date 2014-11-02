@@ -52,6 +52,8 @@ public class Application extends Controller {
         results.priceScores = new Integer[count];
         results.hospitals = new String[count];
         results.addresses = new String[count];
+        results.latitudes = new Double[count];
+        results.longitudes = new Double[count];
 
         results.numHospitals = count;
         count = 0;
@@ -59,8 +61,10 @@ public class Application extends Controller {
             Hospital currH = entry.getValue();
             if(currH.prices[fakeProc] != null){
                 results.hospitals[count] = currH.hospitalName;
-                results.priceScores[count] = currH.prices[fakeProc] * 5;
+                results.priceScores[count] = 110 + (1*currH.prices[fakeProc]);
                 results.addresses[count] = currH.streetAddress;
+                results.latitudes[count] = currH.latitude;
+                results.longitudes[count] = currH.longitude;
                 //results.hospitalName = currH.hospitalName;
                 int num = 0;
                 double sum = 0;
@@ -115,7 +119,7 @@ public class Application extends Controller {
         //QUALITY DATA
 
 
-        String path = "data/Cleaned_Hospital_Data.csv";
+        String path = "data/qual_data.csv";
         BufferedReader fileReader = null;
 
         final String DELIMITER = ",";
@@ -141,9 +145,7 @@ public class Application extends Controller {
 
                     if((lineNum - 1) % 21 == 0){
                         if(colNum == 2){
-                            //System.out.println("and here!");
                             inUse.hospitalName = token;
-                            //System.out.println("but here?");
                         }
                         if(colNum == 1){
                             System.out.println(Long.parseLong(token));
@@ -153,9 +155,15 @@ public class Application extends Controller {
                             inUse.streetAddress = token;
                         if(colNum == 4)
                             inUse.streetAddress += " " + token + ", MA";
+                        if(colNum == 15){
+                            System.out.println("the damn line number: " + lineNum);
+                            inUse.latitude = Double.parseDouble(token);
+                        }
+                        if(colNum == 16)
+                            inUse.longitude = Double.parseDouble(token);
                     }
 
-                    if((lineNum - 1) % 3 == 0 && colNum == 19){
+                    if((lineNum - 1) % 3 == 0 && colNum == 18){
                         double num = Double.parseDouble(token);
                         if((lineNum - 1) % 21 == 0)
                             inUse.explainMed = (int) (num * 100);
@@ -171,8 +179,8 @@ public class Application extends Controller {
                             inUse.bathroom = (int) (num * 100);
                         if((lineNum - 1) % 21 == 18)
                             inUse.promptness = (int) (num * 100);
-
                     }
+
                     colNum++;
                 }
                 if((lineNum + 1) % 21 == 0){
@@ -198,12 +206,16 @@ public class Application extends Controller {
             lineNum = 0;
             int procNum = 0;
             long currNum = 0;
-            long prevNum = 0;
+            long prevNum = 422;
+            boolean firstLine = true;
 
             while ((line = fileReader.readLine()) != null )
             {
+                if(firstLine){
+                    firstLine = false;
+                    continue;
+                }
                 Hospital inUse2 = new Hospital(1);
-
                 String[] tokens = line.split(DELIMITER);
                 int colNum = 0;
                 long idNum = 0;
@@ -217,20 +229,27 @@ public class Application extends Controller {
                     }
                     if(colNum == 2){
                         idNum = Long.parseLong(token);
+                        System.out.println("id num: " + idNum);
                     }
                     if(colNum == 12){
-                        if(procNum < 97){
+                        //if(procNum < 97){
                             Hospital response = map.get(idNum);
+
                             double dVal = (1.0 - Double.parseDouble(token));
+
+                            System.out.println(procNum + " percent above or below val: " + dVal);
                             int val = (int)(200 * dVal);
+                            System.out.println("final val: " + val);
+
                             response.prices[procNum] = val;
                             map.put(idNum, response);
-                            if(procNum == 96) break;
-                        }
+
+                        //}
                     }
                     colNum++;
                     prevNum = currNum;
                 }
+                //if(procNum == 96) break;
             }
         }
         catch (Exception e) {

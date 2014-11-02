@@ -30,8 +30,10 @@ public class Hospital extends Model {
     public int pain;
     public int bathroom;
     public int promptness;
+    public double latitude;
+    public double longitude;
 
-    public Integer[] prices = new Integer[100];
+    public Integer[] prices = new Integer[101];
 
 
 

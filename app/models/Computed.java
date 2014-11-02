@@ -15,6 +15,8 @@ public class Computed {
     public Integer numHospitals;
     public Integer qualityScores[];
     public Integer priceScores[];
+    public Double latitudes[];
+    public Double longitudes[];
 
     public Computed(){
         procName = "";
